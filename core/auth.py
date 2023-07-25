@@ -36,6 +36,15 @@ async def authenticate(email: EmailStr, password: str, db: AsyncSession) -> Opti
         return user
 
 
-def create_token(token_type: str, lifetime: timedelta, sub: str) -> str:
+def _create_token(token_type: str, lifetime: timedelta, sub: str) -> str:
     payload = {}
-    bsb =
+
+    sp = timezone('America/Sao_Paulo')
+    expire = datetime.now(tz=sp) + lifetime
+
+    payload['type'] = token_type
+    payload['exp'] = expire
+    payload['iat'] = datetime.now(tz=sp)
+    payload['sub'] = str(sub)
+
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.ALGORITHM)
