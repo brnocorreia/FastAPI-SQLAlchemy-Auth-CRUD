@@ -25,11 +25,11 @@ class UserSchemaArticle(UserSchemaBase):
 
 
 class UserSchemaUpdate(UserSchemaBase):
-    name: Optional[str]
-    surname: Optional[str]
-    email: Optional[EmailStr]
-    password: Optional[str]
-    is_Admin: Optional[bool]
+    name: Optional[str] = None
+    surname: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    is_Admin: Optional[bool] = None
 
 
 

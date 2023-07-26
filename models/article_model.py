@@ -1,4 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+import datetime
+
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from core.configs import settings

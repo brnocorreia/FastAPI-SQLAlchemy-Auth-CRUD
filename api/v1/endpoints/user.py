@@ -1,11 +1,13 @@
 from typing import List, Optional, Any
 
+
 from fastapi import APIRouter, status, Depends, HTTPException, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
 
 from models.user_model import UserModel
 from schemas.user_schema import UserSchemaBase, UserSchemaArticle, UserSchemaCreate, UserSchemaUpdate
@@ -33,10 +35,14 @@ async def post_user(user: UserSchemaCreate, db: AsyncSession = Depends(get_sessi
         is_Admin=user.is_Admin
     )
     async with db as session:
-        session.add(new_user)
-        await session.commit()
+        try:
+            session.add(new_user)
+            await session.commit()
 
-        return new_user
+            return new_user
+        except IntegrityError:
+            raise HTTPException(detail='Email already registered. Try login or create user with another one',
+                                status_code=status.HTTP_406_NOT_ACCEPTABLE)
 
 
 # GET / All Users
@@ -77,7 +83,7 @@ async def update_user_by_id(user_id: int,
         user_update: UserSchemaBase = result.scalars().unique().one_or_none()
 
         if user_update:
-            if logged_user.id != user_update.user_id:
+            if logged_user.email != user_update.email:
                 raise HTTPException(detail='Users cannot modify profiles they do not own.',
                                     status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -111,7 +117,7 @@ async def delete_article(user_id: int,
         user_delete: UserModel = result.scalars().unique().one_or_none()
 
         if user_delete:
-            if logged_user.id != user_delete.user_id:
+            if logged_user.email != user_delete.email:
                 raise HTTPException(detail='Users cannot delete profile they do not own.',
                                     status_code=status.HTTP_401_UNAUTHORIZED)
 
