@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional, Any
 
 
@@ -97,6 +98,8 @@ async def update_user_by_id(user_id: int,
                 user_update.is_Admin = user.is_Admin
             if user.password:
                 user_update.password = hash_generator(user.password)
+
+            user.updated_at = datetime.utcnow()
 
             await session.commit()
 

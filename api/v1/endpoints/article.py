@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, status, Depends, HTTPException, Response
@@ -79,6 +80,8 @@ async def update_article(article_id: int, article: ArticleSchema,
                 article_update.description = article.description
             if article.url_source:
                 article_update.url_source = article.url_source
+
+            article_update.updated_at = datetime.utcnow()
 
             await session.commit()
 

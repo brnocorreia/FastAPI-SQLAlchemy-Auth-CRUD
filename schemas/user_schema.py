@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr
@@ -11,9 +12,12 @@ class UserSchemaBase(BaseModel):
     surname: str
     email: EmailStr
     is_Admin: bool = False
+    created_at: datetime = None
+    updated_at: datetime = None
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 
 class UserSchemaCreate(UserSchemaBase):

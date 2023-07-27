@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 
-from core.configs import settings
+
+from models.base_model import TimeStampedModel
 
 
-class UserModel(settings.DBBaseModel):
+class UserModel(TimeStampedModel):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)

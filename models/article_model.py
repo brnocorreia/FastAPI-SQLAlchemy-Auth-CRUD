@@ -5,9 +5,10 @@ from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from core.configs import settings
+from models.base_model import TimeStampedModel
 
 
-class ArticleModel(settings.DBBaseModel):
+class ArticleModel(TimeStampedModel):
     __tablename__ = 'articles'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
